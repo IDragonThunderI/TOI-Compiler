@@ -1,10 +1,10 @@
 \ Start program \
 
-while(RIA1 < RIA2 and RIA2 > RIA3 or not(RIA3 = 0x1)) do
+do
 {
-	RIA1 := RIA1 + RIA2;
-	RIA2 := RIA2 - 0x1;
-	RIA3 := RIA3 + 0x1;
-}
+	MSA1 := MSA1 + MSA2;
+	MSA2 := MSA2 - 0x1;
+	MSA3 := MSA3 + 0x1;
+} while(MSA1 < MSA2 and MSA2 > MSA3 or not(MSA3 = 0x1))
 
 \ End program \
