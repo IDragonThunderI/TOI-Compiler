@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -239,16 +239,16 @@ void fill_buf_lexem()
         lex_tabl >> buf3;
         if (buf2 != "")
         {
-            if (buf2 != "не_удалось_распознать")
+            if (buf2 != "РЅРµ_СѓРґР°Р»РѕСЃСЊ_СЂР°СЃРїРѕР·РЅР°С‚СЊ")
             {
 
-                if (buf2 != "комментарий")
+                if (buf2 != "РєРѕРјРјРµРЅС‚Р°СЂРёР№")
                 {
-                    if (buf2 == "идентификатор") {
+                    if (buf2 == "РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ") {
                         tokensAC.push_back(buf1);
                         buf_lexem.push_back("a");
                     }
-                    else if (buf2 == "константа") {
+                    else if (buf2 == "РєРѕРЅСЃС‚Р°РЅС‚Р°") {
                         tokensAC.push_back(buf1);
                         buf_lexem.push_back("c");
                     }
@@ -259,7 +259,7 @@ void fill_buf_lexem()
             }
             else
             {
-                cout << "Не удалось распознать лексему!\nСтрока: " << buf3 << endl;
+                cout << "РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ Р»РµРєСЃРµРјСѓ!\nРЎС‚СЂРѕРєР°: " << buf3 << endl;
             }
         }
         buf1 = "";
@@ -303,7 +303,7 @@ void s_analyz(ofstream& file_out_SR) {
             switch (relations) {
             case '<':
             case '=':
-                file_out_SR << " | Сдвиг | ";
+                file_out_SR << " | РЎРґРІРёРі | ";
                 for (int i = 0; i < ruleCount; i++)
                     file_out_SR << rules[i] << " ";
                 file_out_SR << " | " << endl;
@@ -312,7 +312,7 @@ void s_analyz(ofstream& file_out_SR) {
                 break;
             case '>':
             {
-                file_out_SR << " | Свертка";
+                file_out_SR << " | РЎРІРµСЂС‚РєР°";
 
 
                 int c = 1, bb = 0;
@@ -335,7 +335,7 @@ void s_analyz(ofstream& file_out_SR) {
 
                 int num_rule = Get_Rule(gamma);
                 rules.push_back(num_rule);
-                file_out_SR << " \"" << gamma << "\" по правилу " << rules[ruleCount] << " | ";
+                file_out_SR << " \"" << gamma << "\" РїРѕ РїСЂР°РІРёР»Сѓ " << rules[ruleCount] << " | ";
                 if (rules[ruleCount] != -1) {
                     ruleCount++;
                     buf_lexem[j] = (rules[ruleCount - 1] >= 7 && rules[ruleCount - 1] <= 13) ? "B" : "E";
@@ -350,11 +350,11 @@ void s_analyz(ofstream& file_out_SR) {
                 break;
             }
             case ' ':
-                cout << "Найден пробел в правилах \n";
+                cout << "РќР°Р№РґРµРЅ РїСЂРѕР±РµР» РІ РїСЂР°РІРёР»Р°С… \n";
                 error_check = true;
                 break;
             default:
-                cout << "\n Ошибка в правилах \n" << endl;
+                cout << "\n РћС€РёР±РєР° РІ РїСЂР°РІРёР»Р°С… \n" << endl;
                 error_check = true;
                 break;
             }
@@ -363,7 +363,7 @@ void s_analyz(ofstream& file_out_SR) {
 
         if (succes_check == true)
         {
-            file_out_SR << " | Разбор закончен \n\n Цепочка правил: ";
+            file_out_SR << " | Р Р°Р·Р±РѕСЂ Р·Р°РєРѕРЅС‡РµРЅ \n\n Р¦РµРїРѕС‡РєР° РїСЂР°РІРёР»: ";
             for (int i = 0; i < ruleCount; i++) {
                 Rules << rules[i] << " ";
                 file_out_SR << rules[i] << " ";

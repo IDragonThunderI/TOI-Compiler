@@ -1,4 +1,4 @@
-#include "LexAnalyser.h"
+ï»¿#include "LexAnalyser.h"
 #include "SyntaxAnalyser.h"
 #include "CodeGen.h"
 #include <iostream>
@@ -8,6 +8,6 @@ int main(int argc, char* argv[])
 	lexAnalysis(argv[1]);
 	syntaxAnalysis();
 	genTriads();
-	std::cout << "Êîìïèëÿöèÿ óñïåøíî çàâåðøåíà!" << std::endl;
+	std::cout << "ÐšÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ†Ð¸Ñ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð°!" << std::endl;
 	return 0;
 }
