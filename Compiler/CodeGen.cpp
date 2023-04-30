@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <stdio.h>
 #include <string>
 #include <math.h>
@@ -51,15 +51,14 @@ void gen_triads(ofstream& fout, Node& _node)
             _bufer_for_jmp.push_back(_count + all);
             _bufer_for_jmp2.push_back(_count - all_buf - 1);
         }
-        else if (_node.leaf[i].key == "if")
+        else if (_node.leaf[i].key == "while")
         {
-            all = count_for(_node.leaf[i + 2]) + 1;
-            all_buf = count_for(_node.leaf[i + 4]) + 1;
+            all = count_for(_node.leaf[i + 3]);
             gen_triads(fout, _node.leaf[i + 1].leaf[0]);
-            fout << _count << " if(^" << _count - 1 << ",^" << _count + all + 2 << ")" << endl;
+            fout << _count << " while(^" << _count - 1 << ",^" << _count + all + 2 << ")" << endl;
             _count++;
             _bufer_for_jmp.push_back(_count + all);
-            _bufer_for_jmp2.push_back(_count + all + all_buf + 1);
+            _bufer_for_jmp2.push_back(_count - 1);
         }
         else if (_node.leaf[i].key == ":=")
         {
@@ -162,7 +161,7 @@ void gen_triads(ofstream& fout, Node& _node)
             gen_triads(fout, _node.leaf[i]);
         }
         else if (_node.leaf[i].key == "or")
-        {   
+        {
             if (i == 0) pred_left = true;
             if (i == 1) pred_right = true;
             if (_node.key == "not")
@@ -257,17 +256,6 @@ void create_tree(int n, Node& _node, int i)
                 _node.leaf.push_back(_node_buf);
                 _node.leaf[2].key = ".";
                 create_tree(n + 1, _node.leaf[1], b_help[1] + 1);
-                create_tree(n + 1, _node.leaf[2], b_help[2] + 1);
-            }
-            else if (b[1] == "?")
-            {
-                _node.leaf.push_back(_node_buf);
-                _node.leaf[0].key = "?";
-                _node.leaf.push_back(_node_buf);
-                _node.leaf[1].key = "$";
-                _node.leaf.push_back(_node_buf);
-                _node.leaf[2].key = ".";
-                create_tree(n + 1, _node.leaf[0], b_help[0] + 1);
                 create_tree(n + 1, _node.leaf[2], b_help[2] + 1);
             }
             else if (b[1] == ":=")
@@ -491,23 +479,20 @@ void create_tree(int n, Node& _node, int i)
                 create_tree(n + 1, _node.leaf[2], b_help[2] + 1);
             }
         }
-        else if (b.size() == 5)
+        else if (b.size() == 4)
         {
-            if (b[1] == "?")
+            if (b[0] == "while")
             {
                 _node.leaf.push_back(_node_buf);
-                _node.leaf[0].key = "if";
+                _node.leaf[0].key = "while";
                 _node.leaf.push_back(_node_buf);
                 _node.leaf[1].key = "$";
                 _node.leaf.push_back(_node_buf);
-                _node.leaf[2].key = "E";
+                _node.leaf[2].key = "do";
                 _node.leaf.push_back(_node_buf);
-                _node.leaf[3].key = ":";
-                _node.leaf.push_back(_node_buf);
-                _node.leaf[4].key = "E";
-                create_tree(n + 1, _node.leaf[1], b_help[0] + 1);
-                create_tree(n + 1, _node.leaf[2], b_help[2] + 1);
-                create_tree(n + 1, _node.leaf[4], b_help[4] + 1);
+                _node.leaf[3].key = ".";
+                create_tree(n + 1, _node.leaf[1], b_help[1] + 1);
+                create_tree(n + 1, _node.leaf[3], b_help[3] + 1);
             }
         }
         else if (b.size() == 1)
@@ -824,7 +809,7 @@ void vivod(ofstream& fout, Node& _node, int space)
         return;
     for (int i = 0; i < _node.leaf.size(); i++)
     {
-        if (_node.key == "." || _node.key == "" || _node.key == "$" || _node.key == ":=")
+        if (_node.key == "." || _node.key == "" || _node.key == "$")
             vivod(fout, _node.leaf[i], space);
         else
             vivod(fout, _node.leaf[i], space + 1);
@@ -850,7 +835,7 @@ void derevo_oper()
         }
         str_all_num.push_back(num_space);
     }
-    create_tree(2, main_Node, 2);
+    create_tree(1, main_Node, 1);
     ofstream fout("derevo_operations.txt", ios_base::trunc);
     vivod(fout, main_Node, 0);
     ofstream file_out("triads.txt", ios_base::trunc);

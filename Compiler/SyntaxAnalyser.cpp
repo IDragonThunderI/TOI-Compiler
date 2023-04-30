@@ -1,4 +1,4 @@
-п»ї#include <iostream>
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -12,14 +12,14 @@ vector<string> buf_lexem;
 vector<string> derevo_obrat;
 
 char rule_matrix[21][21] = {
-    //       ;    ?    (    )    :    {    }    a    c   :=   or   and   <    >    =   not   -    +    *    /    #
-    /* ; */ '>', ' ', ' ', ' ', '>', '<', '>', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '>',
-    /* ? */ '>', ' ', '<', ' ', '=', '<', ' ', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+    //       ;  while  (    )   do    {    }    a    c   :=   or   and   <    >    =   not   -    +    *    /    #
+    /* ; */ '>', '>', ' ', ' ', ' ', '<', '>', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '>',
+  /*while*/ ' ', ' ', '<', ' ', '=', ' ', ' ', ' ', ' ', ' ', '<', '<', ' ', ' ', ' ', '<', ' ', ' ', ' ', ' ', ' ',
     /* ( */ ' ', ' ', '<', '=', ' ', ' ', ' ', '<', '<', ' ', '<', '<', '<', '<', '<', '<', '<', '<', '<', '<', ' ',
-    /* ) */ '>', '>', ' ', '>', '>', '<', '>', '<', ' ', '>', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
-    /* : */ '>', ' ', ' ', ' ', '>', '<', '>', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '>',
+    /* ) */ '>', '<', ' ', '>', '>', '<', '>', '<', ' ', '>', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
+    /*do */ '<', '<', ' ', ' ', ' ', '<', '>', '<', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '>',
     /* { */ '<', ' ', ' ', '>', '<', ' ', '=', '<', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-    /* } */ '>', ' ', ' ', ' ', '>', ' ', '>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '>',
+    /* } */ '>', ' ', ' ', ' ', ' ', ' ', '>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '>',
     /* a */ '>', ' ', ' ', '>', '>', ' ', '>', ' ', ' ', '=', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
     /* c */ '>', ' ', ' ', '>', '>', ' ', '>', ' ', ' ', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
     /*:= */ '>', ' ', '<', ' ', '>', '>', '<', '<', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '<', '<', '<', '<', ' ',
@@ -27,60 +27,60 @@ char rule_matrix[21][21] = {
     /*and*/ '>', ' ', '<', '>', '>', ' ', ' ', '<', '<', ' ', '>', '<', '<', '<', '<', '<', '<', '<', '<', '<', ' ',
     /* < */ ' ', ' ', '<', '>', ' ', ' ', ' ', '<', '<', ' ', '>', '>', ' ', ' ', ' ', ' ', '<', '<', '<', '<', ' ',
     /* > */ ' ', ' ', '<', '>', ' ', ' ', ' ', '<', '<', ' ', '>', '>', ' ', ' ', ' ', ' ', '<', '<', '<', '<', ' ',
-    /* = */ ' ', ' ', '<', '>', ' ', ' ', ' ', '<', '<', ' ', '>', '>', ' ', ' ', ' ', ' ', '<', '<', '<', '<', ' ',
-    /*not*/ '<', ' ', '<', '>', ' ', ' ', ' ', '<', ' ', ' ', '>', '>', '<', '<', '<', ' ', '>', '>', '>', '>', ' ',
-    /* - */ '>', ' ', '<', '>', '>', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '<', '<', ' ',
-    /* + */ '>', ' ', '<', '>', '>', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '<', '<', ' ',
-    /* * */ '>', ' ', '<', '>', '>', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
-    /* / */ '>', ' ', '<', '>', '>', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
+    /* = */ ' ', ' ', '<', '>', '>', ' ', ' ', '<', '<', ' ', '>', '>', ' ', ' ', ' ', ' ', '<', '<', '<', '<', ' ',
+    /*not*/ '<', ' ', '<', '>', '>', ' ', ' ', '<', ' ', ' ', '>', '>', '<', '<', '<', ' ', '>', '>', '>', '>', ' ',
+    /* - */ '>', ' ', '<', '>', ' ', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '<', '<', ' ',
+    /* + */ '>', ' ', '<', '>', ' ', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '<', '<', ' ',
+    /* * */ '>', ' ', '<', '>', ' ', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
+    /* / */ '>', ' ', '<', '>', ' ', ' ', '>', '<', '<', ' ', '>', '>', '>', '>', '>', ' ', '>', '>', '>', '>', ' ',
     /* $ */ '<', '<', '<', ' ', ' ', '<', ' ', '<', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '<', '<', '<', '<', ' '
 };
 
 char Get_Relations(string left, string right) {
     int l = -1, r = -1;
-    if (left == ";")        l = 0;
-    else if (left == "?")   l = 1;
-    else if (left == "(")   l = 2;
-    else if (left == ")")   l = 3;
-    else if (left == ":")   l = 4;
-    else if (left == "{")   l = 5;
-    else if (left == "}")   l = 6;
-    else if (left == "a")   l = 7;
-    else if (left == "c")   l = 8;
-    else if (left == ":=")  l = 9;
-    else if (left == "or")  l = 10;
-    else if (left == "and") l = 11;
-    else if (left == "<")   l = 12;
-    else if (left == ">")   l = 13;
-    else if (left == "=")   l = 14;
-    else if (left == "not") l = 15;
-    else if (left == "-")   l = 16;
-    else if (left == "+")   l = 17;
-    else if (left == "*")   l = 18;
-    else if (left == "/")   l = 19;
-    else if (left == "$")   l = 20;
+    if (left == ";")            l = 0;
+    else if (left == "while")   l = 1;
+    else if (left == "(")       l = 2;
+    else if (left == ")")       l = 3;
+    else if (left == "do")      l = 4;
+    else if (left == "{")       l = 5;
+    else if (left == "}")       l = 6;
+    else if (left == "a")       l = 7;
+    else if (left == "c")       l = 8;
+    else if (left == ":=")      l = 9;
+    else if (left == "or")      l = 10;
+    else if (left == "and")     l = 11;
+    else if (left == "<")       l = 12;
+    else if (left == ">")       l = 13;
+    else if (left == "=")       l = 14;
+    else if (left == "not")     l = 15;
+    else if (left == "-")       l = 16;
+    else if (left == "+")       l = 17;
+    else if (left == "*")       l = 18;
+    else if (left == "/")       l = 19;
+    else if (left == "$")       l = 20;
 
-    if (right == ";")        r = 0;
-    else if (right == "?")   r = 1;
-    else if (right == "(")   r = 2;
-    else if (right == ")")   r = 3;
-    else if (right == ":")   r = 4;
-    else if (right == "{")   r = 5;
-    else if (right == "}")   r = 6;
-    else if (right == "a")   r = 7;
-    else if (right == "c")   r = 8;
-    else if (right == ":=")  r = 9;
-    else if (right == "or")  r = 10;
-    else if (right == "and") r = 11;
-    else if (right == "<")   r = 12;
-    else if (right == ">")   r = 13;
-    else if (right == "=")   r = 14;
-    else if (right == "not") r = 15;
-    else if (right == "-")   r = 16;
-    else if (right == "+")   r = 17;
-    else if (right == "*")   r = 18;
-    else if (right == "/")   r = 19;
-    else if (right == "#")   r = 20;
+    if (right == ";")           r = 0;
+    else if (right == "while")  r = 1;
+    else if (right == "(")      r = 2;
+    else if (right == ")")      r = 3;
+    else if (right == "do")     r = 4;
+    else if (right == "{")      r = 5;
+    else if (right == "}")      r = 6;
+    else if (right == "a")      r = 7;
+    else if (right == "c")      r = 8;
+    else if (right == ":=")     r = 9;
+    else if (right == "or")     r = 10;
+    else if (right == "and")    r = 11;
+    else if (right == "<")      r = 12;
+    else if (right == ">")      r = 13;
+    else if (right == "=")      r = 14;
+    else if (right == "not")    r = 15;
+    else if (right == "-")      r = 16;
+    else if (right == "+")      r = 17;
+    else if (right == "*")      r = 18;
+    else if (right == "/")      r = 19;
+    else if (right == "#")      r = 20;
 
     if (l == -1 || r == -1) {
         cout << "Left is " << left << " right is " << right << "\nERROR with l=" << l << " and r=" << r << endl;
@@ -89,29 +89,28 @@ char Get_Relations(string left, string right) {
     char b = rule_matrix[l][r];
     return rule_matrix[l][r];
 }
-
+                                       
 int Get_Rule(string search_rule)
 {
-    if (search_rule == "E;E")           return 2;
-    else if (search_rule == "E;")       return 3;
-    else if (search_rule == "B?E")      return 4;
-    else if (search_rule == "B?E:E")    return 5;
-    else if (search_rule == "{E}")      return 6;
-    else if (search_rule == "a:=E")     return 7;
-    else if (search_rule == "BandB")    return 8;
-    else if (search_rule == "BorB")     return 9;
-    else if (search_rule == "notB")     return 10;
-    else if (search_rule == "(B)")      return 11;
-    else if (search_rule == "E<E")      return 12;
-    else if (search_rule == "E=E")      return 13;
-    else if (search_rule == "E>E")      return 14;
-    else if (search_rule == "E-E")      return 15;
-    else if (search_rule == "E+E")      return 16;
-    else if (search_rule == "E*E")      return 17;
-    else if (search_rule == "E/E")      return 18;
-    else if (search_rule == "(E)")      return 19;
-    else if (search_rule == "a")        return 20;
-    else if (search_rule == "c")        return 21;
+    if (search_rule == "E;E")               return 2;
+    else if (search_rule == "E;")           return 3;
+    else if (search_rule == "whileBdoE")    return 4;
+    else if (search_rule == "{E}")          return 5;
+    else if (search_rule == "a:=E")         return 6;
+    else if (search_rule == "BandB")        return 7;
+    else if (search_rule == "BorB")         return 8;
+    else if (search_rule == "notB")         return 9;
+    else if (search_rule == "(B)")          return 10;
+    else if (search_rule == "E<E")          return 11;
+    else if (search_rule == "E=E")          return 12;
+    else if (search_rule == "E>E")          return 13;
+    else if (search_rule == "E-E")          return 14;
+    else if (search_rule == "E+E")          return 15;
+    else if (search_rule == "E*E")          return 16;
+    else if (search_rule == "E/E")          return 17;
+    else if (search_rule == "(E)")          return 18;
+    else if (search_rule == "a")            return 19;
+    else if (search_rule == "c")            return 20;
     else   return -1;
 }
 void derevo(int g) {
@@ -128,73 +127,69 @@ void derevo(int g) {
     }
     else if (rules[buf_i] == 4)
     {
-        bufer.push_back("B"); bufer.push_back("?"); bufer.push_back("E");
+        bufer.push_back("while"); bufer.push_back("B"); bufer.push_back("do"); bufer.push_back("E");
     }
     else if (rules[buf_i] == 5)
     {
-        bufer.push_back("B"); bufer.push_back("?"); bufer.push_back("E"); bufer.push_back(":"); bufer.push_back("E");
+        bufer.push_back("{"); bufer.push_back("E"); bufer.push_back("}");
     }
     else if (rules[buf_i] == 6)
     {
-        bufer.push_back("{"); bufer.push_back("E"); bufer.push_back("}");
+        bufer.push_back("a"); bufer.push_back(":="); bufer.push_back("E");
     }
     else if (rules[buf_i] == 7)
     {
-        bufer.push_back("a"); bufer.push_back(":="); bufer.push_back("E");
+        bufer.push_back("B"); bufer.push_back("and"); bufer.push_back("B");
     }
     else if (rules[buf_i] == 8)
     {
-        bufer.push_back("B"); bufer.push_back("and"); bufer.push_back("B");
+        bufer.push_back("B"); bufer.push_back("or"); bufer.push_back("B");
     }
     else if (rules[buf_i] == 9)
     {
-        bufer.push_back("B"); bufer.push_back("or"); bufer.push_back("B");
+        bufer.push_back("not"); bufer.push_back("B");
     }
     else if (rules[buf_i] == 10)
     {
-        bufer.push_back("not"); bufer.push_back("B");
+        bufer.push_back("("); bufer.push_back("B"); bufer.push_back(")");
     }
     else if (rules[buf_i] == 11)
     {
-        bufer.push_back("("); bufer.push_back("B"); bufer.push_back(")");
+        bufer.push_back("E"); bufer.push_back("<"); bufer.push_back("E");
     }
     else if (rules[buf_i] == 12)
     {
-        bufer.push_back("E"); bufer.push_back("<"); bufer.push_back("E");
+        bufer.push_back("E"); bufer.push_back("="); bufer.push_back("E");
     }
     else if (rules[buf_i] == 13)
     {
-        bufer.push_back("E"); bufer.push_back("="); bufer.push_back("E");
+        bufer.push_back("E"); bufer.push_back(">"); bufer.push_back("E");
     }
     else if (rules[buf_i] == 14)
     {
-        bufer.push_back("E"); bufer.push_back(">"); bufer.push_back("E");
+        bufer.push_back("E"); bufer.push_back("-"); bufer.push_back("E");
     }
     else if (rules[buf_i] == 15)
     {
-        bufer.push_back("E"); bufer.push_back("-"); bufer.push_back("E");
+        bufer.push_back("E"); bufer.push_back("+"); bufer.push_back("E");
     }
     else if (rules[buf_i] == 16)
     {
-        bufer.push_back("E"); bufer.push_back("+"); bufer.push_back("E");
+        bufer.push_back("E"); bufer.push_back("*"); bufer.push_back("E");
     }
     else if (rules[buf_i] == 17)
     {
-        bufer.push_back("E"); bufer.push_back("*"); bufer.push_back("E");
+        bufer.push_back("E"); bufer.push_back("/"); bufer.push_back("E");
     }
     else if (rules[buf_i] == 18)
     {
-        bufer.push_back("E"); bufer.push_back("/"); bufer.push_back("E");
+        bufer.push_back("("); bufer.push_back("E"); bufer.push_back(")");
     }
     else if (rules[buf_i] == 19)
     {
-        bufer.push_back("("); bufer.push_back("E"); bufer.push_back(")");
-    }
-    else if (rules[buf_i] == 20)
-    {
         bufer.push_back("a");
     }
-    else if (rules[buf_i] == 21)
+    else if (rules[buf_i] == 20)
     {
         bufer.push_back("c");
     }
@@ -244,16 +239,16 @@ void fill_buf_lexem()
         lex_tabl >> buf3;
         if (buf2 != "")
         {
-            if (buf2 != "РЅРµ_СѓРґР°Р»РѕСЃСЊ_СЂР°СЃРїРѕР·РЅР°С‚СЊ")
+            if (buf2 != "не_удалось_распознать")
             {
 
-                if (buf2 != "РєРѕРјРјРµРЅС‚Р°СЂРёР№")
+                if (buf2 != "комментарий")
                 {
-                    if (buf2 == "РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ") {
+                    if (buf2 == "идентификатор") {
                         tokensAC.push_back(buf1);
                         buf_lexem.push_back("a");
                     }
-                    else if (buf2 == "РєРѕРЅСЃС‚Р°РЅС‚Р°") {
+                    else if (buf2 == "константа") {
                         tokensAC.push_back(buf1);
                         buf_lexem.push_back("c");
                     }
@@ -264,7 +259,7 @@ void fill_buf_lexem()
             }
             else
             {
-                cout << "РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°СЃРїРѕР·РЅР°С‚СЊ Р»РµРєСЃРµРјСѓ!\nРЎС‚СЂРѕРєР°: " << buf3 << endl;
+                cout << "Не удалось распознать лексему!\nСтрока: " << buf3 << endl;
             }
         }
         buf1 = "";
@@ -308,7 +303,7 @@ void s_analyz(ofstream& file_out_SR) {
             switch (relations) {
             case '<':
             case '=':
-                file_out_SR << " | РЎРґРІРёРі | ";
+                file_out_SR << " | Сдвиг | ";
                 for (int i = 0; i < ruleCount; i++)
                     file_out_SR << rules[i] << " ";
                 file_out_SR << " | " << endl;
@@ -317,7 +312,7 @@ void s_analyz(ofstream& file_out_SR) {
                 break;
             case '>':
             {
-                file_out_SR << " | РЎРІРµСЂС‚РєР°";
+                file_out_SR << " | Свертка";
 
 
                 int c = 1, bb = 0;
@@ -340,10 +335,10 @@ void s_analyz(ofstream& file_out_SR) {
 
                 int num_rule = Get_Rule(gamma);
                 rules.push_back(num_rule);
-                file_out_SR << " \"" << gamma << "\" РїРѕ РїСЂР°РІРёР»Сѓ " << rules[ruleCount] << " | ";
+                file_out_SR << " \"" << gamma << "\" по правилу " << rules[ruleCount] << " | ";
                 if (rules[ruleCount] != -1) {
                     ruleCount++;
-                    buf_lexem[j] = (rules[ruleCount - 1] >= 8 && rules[ruleCount - 1] <= 14) ? "B" : "E";
+                    buf_lexem[j] = (rules[ruleCount - 1] >= 7 && rules[ruleCount - 1] <= 13) ? "B" : "E";
 
                     for (int i = 0; i < ruleCount; i++)
                         file_out_SR << rules[i] << " ";
@@ -355,11 +350,11 @@ void s_analyz(ofstream& file_out_SR) {
                 break;
             }
             case ' ':
-                cout << "РќР°Р№РґРµРЅ РїСЂРѕР±РµР» РІ РїСЂР°РІРёР»Р°С… \n";
+                cout << "Найден пробел в правилах \n";
                 error_check = true;
                 break;
             default:
-                cout << "\n РћС€РёР±РєР° РІ РїСЂР°РІРёР»Р°С… \n" << endl;
+                cout << "\n Ошибка в правилах \n" << endl;
                 error_check = true;
                 break;
             }
@@ -368,7 +363,7 @@ void s_analyz(ofstream& file_out_SR) {
 
         if (succes_check == true)
         {
-            file_out_SR << " | Р Р°Р·Р±РѕСЂ Р·Р°РєРѕРЅС‡РµРЅ \n\n Р¦РµРїРѕС‡РєР° РїСЂР°РІРёР»: ";
+            file_out_SR << " | Разбор закончен \n\n Цепочка правил: ";
             for (int i = 0; i < ruleCount; i++) {
                 Rules << rules[i] << " ";
                 file_out_SR << rules[i] << " ";
