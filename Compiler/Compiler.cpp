@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
 	lexAnalysis(argv[1]);
 	syntaxAnalysis();
-	genTriads();
+	//genTriads();
 	std::cout << "Компиляция успешно завершена!" << std::endl;
 	return 0;
 }

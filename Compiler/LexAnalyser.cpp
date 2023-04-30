@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
-#include "lexAnalyser.h"
+#include "LexAnalyser.h"
 using namespace std;
 
 /*
@@ -49,9 +49,9 @@ enum states
     or1 = 21,
     or2 = 22,
 
-    not1 = 23,
-    not2 = 24,
-    not3 = 25,
+    nt1 = 23,
+    nt2 = 24,
+    nt3 = 25,
 
     while1 = 26,
     while2 = 27,
@@ -193,7 +193,7 @@ int lexAnalysis(string file)
                     break;
                 case 'n':
                     res += n_sym;
-                    state = not1;
+                    state = nt1;
                     break;
                 case 'w':
                     res += n_sym;
@@ -1110,12 +1110,12 @@ int lexAnalysis(string file)
                     break;
                 }
                 break;
-            case (not1):
+            case (nt1):
                 switch (n_sym)
                 {
                 case 'o':
                     res += n_sym;
-                    state = not2;
+                    state = nt2;
                     break;
                 case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
                 case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g': case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
@@ -1195,12 +1195,12 @@ int lexAnalysis(string file)
                     break;
                 }
                 break;
-            case (not2):
+            case (nt2):
                 switch (n_sym)
                 {
                 case 't':
                     res += n_sym;
-                    state = not3;
+                    state = nt3;
                     break;
                 case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
                 case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g': case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n': case 'o': case 'p': case 'q': case 'r': case 's':
@@ -1280,7 +1280,7 @@ int lexAnalysis(string file)
                     break;
                 }
                 break;
-            case (not3):
+            case (nt3):
                 switch (n_sym)
                 {
                 case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
