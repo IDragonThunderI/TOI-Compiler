@@ -53,12 +53,12 @@ void gen_triads(ofstream& fout, Node& _node)
         }
         else if (_node.leaf[i].key == "while")
         {
-            all = count_for(_node.leaf[i + 3]);
+            all = count_for(_node.leaf[i - 1]) + count_for(_node.leaf[i + 1]);
             gen_triads(fout, _node.leaf[i + 1].leaf[0]);
-            fout << _count << " while(^" << _count - 1 << ",^" << _count + all + 2 << ")" << endl;
+            fout << _count << " while(^" << _count - 1 << ",^" << _count + 2 << ")" << endl;
             _count++;
-            _bufer_for_jmp.push_back(_count + all);
-            _bufer_for_jmp2.push_back(_count - 1);
+            _bufer_for_jmp.push_back(_count);
+            _bufer_for_jmp2.push_back(_count - all - 1);
         }
         else if (_node.leaf[i].key == ":=")
         {
@@ -481,16 +481,16 @@ void create_tree(int n, Node& _node, int i)
         }
         else if (b.size() == 4)
         {
-            if (b[0] == "while")
+            if (b[0] == "do")
             {
                 _node.leaf.push_back(_node_buf);
-                _node.leaf[0].key = "while";
+                _node.leaf[0].key = "do";
                 _node.leaf.push_back(_node_buf);
-                _node.leaf[1].key = "$";
+                _node.leaf[1].key = ".";
                 _node.leaf.push_back(_node_buf);
-                _node.leaf[2].key = "do";
+                _node.leaf[2].key = "while";
                 _node.leaf.push_back(_node_buf);
-                _node.leaf[3].key = ".";
+                _node.leaf[3].key = "$";
                 create_tree(n + 1, _node.leaf[1], b_help[1] + 1);
                 create_tree(n + 1, _node.leaf[3], b_help[3] + 1);
             }
